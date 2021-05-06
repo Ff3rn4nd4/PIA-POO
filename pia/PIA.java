@@ -94,6 +94,9 @@ public class PIA {
                                     System.out.println("Opciones: "); 
                                     System.out.println("1--Crear nuevo usuario"); 
                                     System.out.println("2--Cambiar usuario y contraseña");
+                                    System.out.println("3--Desactivar usuario"); 
+                                    System.out.println("4--Crear nuevo paquete"); 
+                                    System.out.println("5--Mostrar Paquetes"); 
                                     sub = lectura.nextInt(); 
                                     switch(sub){
                                         case 1: 
@@ -102,13 +105,20 @@ public class PIA {
                                             break; 
                                         case 2: 
                                             System.out.println("Cambiar nombre de Usuario y contraseña"); 
+                                            break;
+                                        case 3: 
+                                            System.out.println("Desactivar Usuario"); 
                                             break; 
                                         default: 
                                             System.out.println("Seleccione una opción válida"); 
                                     }
                                     break; 
                                 case 2: 
-                                    System.out.println("Crear Reservación"); 
+                                    System.out.println("Reservaciones"); 
+                                    //Crear reservación
+                                    //Buscar reservación
+                                        //Modificarla
+                                        //Eliminarla
                                     break; 
                                 case 3: 
                                     System.out.println("Sesión finalizada"); 
