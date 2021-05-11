@@ -1,3 +1,4 @@
+
 package pia;
 
 import java.util.Scanner;
@@ -6,8 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException; 
 
 public class PIA {
+
+   
     public static void main(String[] args) {
-        int opc, menu, sub; 
+         int opc, menu, sub,sub1,sub2; 
         Scanner lectura = new Scanner(System.in); 
         String userName, password, userAux, pwAux; 
         int clase;  
@@ -16,7 +19,7 @@ public class PIA {
         try{
             File archivo = new File("usuarios.txt"); 
             archivo.createNewFile(); 
-        }
+     }
         catch(IOException e){
             System.out.println("No se puede acceder a los usuarios, intente más tarde"); 
             e.printStackTrace();
@@ -115,10 +118,38 @@ public class PIA {
                                     break; 
                                 case 2: 
                                     System.out.println("Reservaciones"); 
-                                    //Crear reservación
-                                    //Buscar reservación
-                                        //Modificarla
-                                        //Eliminarla
+                                    System.out.println("Opciones: "); 
+                                    System.out.println("1--Crear reservación"); 
+                                    System.out.println("2--Edición de Reservación");
+                                    sub1 = lectura.nextInt();
+                                    
+                                    switch(sub1){
+                                        case 1:
+                                            System.out.println("Crear reservación");
+                                            //archivo que va a guardar todos los datos de la reservación guardada
+                                            
+                                        break;
+                                        
+                                    case 2:
+                                            System.out.println("Opciones: ");
+                                            System.out.println("1--Buscar ");
+                                            System.out.println("2--Modificar "); 
+                                            System.out.println("3--Eliminarla");
+                                            sub2 = lectura.nextInt();
+                                           
+                                        switch(sub2){
+                                            case 1:
+                                            System.out.println("Buscar ");
+                                            break;
+                                            case 2:
+                                            System.out.println("Modificar "); 
+                                            break;
+                                            case 3:
+                                            System.out.println("Eliminarla");
+                                            break;
+                                           
+                                        }
+                                    }
                                     break; 
                                 case 3: 
                                     System.out.println("Sesión finalizada"); 
