@@ -9,6 +9,7 @@ public class PIA {
 
     public static void main(String[] args) {
         int opc, menu, sub, sub1, sub2;
+        int clase, matricula, op = 0;
 
         Scanner lectura = new Scanner(System.in);
         Scanner kb = new Scanner(System.in);
@@ -16,7 +17,7 @@ public class PIA {
         int dia[][] = new int[31][12];
         String userName, password, userAux, pwAux;
         String customerName, email, numcel;
-        int clase, matricula, op;
+
         boolean activo = false, encontrado = false;
         usuario user = null;
         customerdata customer = null;
@@ -141,6 +142,7 @@ public class PIA {
                                         System.out.println("Opciones: ");
                                         System.out.println("1--Crear reservación");
                                         System.out.println("2--Edición de Reservación");
+                                        System.out.println("3--salir");
                                         sub1 = lectura.nextInt();
 
                                         switch (sub1) {
@@ -185,10 +187,14 @@ public class PIA {
                                                 break;
 
                                             case 2:
+                                                do{ 
+                                                    
+                                                
                                                 System.out.println("Opciones: ");
                                                 System.out.println("1--Buscar ");
                                                 System.out.println("2--Modificar ");
                                                 System.out.println("3--Eliminarla");
+                                                System.out.println("4--salir");
                                                 sub2 = lectura.nextInt();
 
                                                 switch (sub2) {
@@ -201,12 +207,17 @@ public class PIA {
                                                     case 3:
                                                         System.out.println("Eliminarla");
                                                         break;
+                                                    case 4:
+                                                        break;
                                                     default:
                                                         System.out.println("Seleccione una opción válida");
 
                                                 }
-                                        }while (op != 2);
-                                    }
+                                                }while(sub2!=4);
+                                        }
+
+                                    } while (sub1 != 3);
+
                                     break;
                                 case 3:
                                     System.out.println("Sesión finalizada");
