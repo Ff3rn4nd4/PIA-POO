@@ -25,9 +25,7 @@ public class PIA_Lab_POO {
         CustomerData primerC = null, ultimoC =null, auxC = null; 
         LocalDate fechaActual = LocalDate.now(); 
         int d = fechaActual.getDayOfMonth(), y = fechaActual.getYear(), m = fechaActual.getMonthValue();
-        int dd=d+90, mm=m, yy=y; 
-        System.out.println("Hoy es "+d+"/"+m+"/"+y); 
-        dd=d+180; 
+        int dd=d+90, mm=m, yy=y;
         while(dd>calendario[mm-1]){
             dd-=calendario[mm-1]; 
             mm+=1; 
@@ -35,7 +33,6 @@ public class PIA_Lab_POO {
                 yy+=1; 
             }
         }
-        System.out.println("Fecha en tres meses: "+dd+"/"+mm+"/"+yy); 
         try{
             File usuarios = new File("usuarios.txt"); 
             File reservaciones = new File("reservaciones.txt"); 
@@ -110,6 +107,7 @@ public class PIA_Lab_POO {
         
         
         do{
+            System.out.println("    <<< BIENVENIDO AL PROGRAMA >>>");
             do{
                 System.out.println("0--Iniciar Sesión\n1--Cerrar el programa"); 
                 opc = lectura.nextShort(); 
