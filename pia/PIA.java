@@ -131,6 +131,7 @@ public class PIA {
                                             break;
                                         case 3:
                                             System.out.println("Desactivar Usuario");
+                                            user.eliminarUsuario();
                                             break;
                                         default:
                                             System.out.println("Seleccione una opción válida");
