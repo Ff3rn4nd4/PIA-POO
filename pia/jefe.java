@@ -1,7 +1,10 @@
 package pia;
 
+import java.io.BufferedReader;
 import java.util.Scanner;
 import java.io.File; 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter; 
 import java.io.IOException; 
 
@@ -62,4 +65,45 @@ public class jefe extends usuario{
         }
         
     }
+    
+    @Override
+    public void eliminarUsuario(){
+        String linea; 
+        String eliminar; 
+        Scanner sc = new Scanner(System.in); 
+        try{
+            File f = new File("usuarios.txt"); 
+            Scanner buffer = new Scanner(f); 
+            File aux = new File("auxiliar.txt"); 
+            aux.createNewFile(); 
+            FileWriter escritor = new FileWriter(aux); 
+            Scanner copiar = new Scanner(aux); 
+            
+            
+            System.out.print("¿Qué usuario desea eliminar? "); 
+            eliminar = sc.next(); 
+            while(buffer.hasNext()){
+                linea = buffer.nextLine(); 
+                if(linea.contains(eliminar)){
+                   System.out.println("Usuario eliminado");  
+                }
+                else{
+                    escritor.write(linea+"\n");
+                }
+            }
+            escritor.close();
+            FileWriter pegar = new FileWriter(f); 
+            while(copiar.hasNext()){
+                linea = copiar.nextLine(); 
+                pegar.write(linea+"\n"); 
+            }
+            copiar.close();
+            pegar.close();
+            System.out.print(aux.delete()); 
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
 }
