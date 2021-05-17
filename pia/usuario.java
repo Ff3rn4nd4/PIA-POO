@@ -42,6 +42,10 @@ public class usuario implements permiso{
     public void crearUsuario() {
         System.out.println("No tiene permiso de crear nuevos usuarios"); 
     }
-
+    
+    @Override
+    public void eliminarUsuario(){
+        System.out.println("No tiene permiso para crear usuarios");
+    }
   
 }
