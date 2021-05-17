@@ -25,7 +25,7 @@ public class PIA_Lab_POO {
         CustomerData primerC = null, ultimoC =null, auxC = null; 
         LocalDate fechaActual = LocalDate.now(); 
         int d = fechaActual.getDayOfMonth(), y = fechaActual.getYear(), m = fechaActual.getMonthValue();
-        int dd=d+90, mm=m, yy=y;
+        int dd=d+180, mm=m, yy=y;
         while(dd>calendario[mm-1]){
             dd-=calendario[mm-1]; 
             mm+=1; 
