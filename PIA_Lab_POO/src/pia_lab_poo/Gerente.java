@@ -46,7 +46,7 @@ public class Gerente extends Usuario{
                 if(!existe){
                     System.out.print("Ingrese una contraseña: "); 
                     pw = lectura.next(); 
-                    escritor.write(us+" "+pw+" "+2+"\n"); 
+                    escritor.write(us+" "+pw+" "+2+" \n"); 
                     System.out.println("Usuario generado con éxito"); 
                 }
                 else{

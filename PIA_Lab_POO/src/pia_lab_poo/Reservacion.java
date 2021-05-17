@@ -100,5 +100,6 @@ public class Reservacion {
         System.out.println("Fecha: "+getDia()+"/"+getMes()+"/"+getYear()); 
         System.out.println("Total: "+getCosto()); 
         System.out.println("Clave: "+getClave()); 
+        System.out.println("Clave del cliente: "+getCliente());
     }
 }

@@ -43,7 +43,7 @@ public class Jefe extends Usuario{
                 if(!existe){
                     System.out.print("Ingrese una contraseña: "); 
                     pw = lectura.next(); 
-                    escritor.write(us+" "+pw+" "+aux+"\n");
+                    escritor.write(us+" "+pw+" "+aux+" \n");
                     System.out.println("Usuario generado con éxito"); 
                 }
                 else{

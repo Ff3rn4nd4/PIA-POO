@@ -75,7 +75,7 @@ public class CustomerData {
     public void escribir(){
         try{
             FileWriter escritor = new FileWriter("clientes.txt", true); 
-            escritor.write(getCustomerName()+" "+getCustomerLastName()+" "+getEmail()+" "+getNumcel()+" "+getMatricula()); 
+            escritor.write(getCustomerName()+" "+getCustomerLastName()+" "+getEmail()+" "+getNumcel()+" "+getMatricula()+" "); 
             escritor.close();
         }
         catch(IOException e){
