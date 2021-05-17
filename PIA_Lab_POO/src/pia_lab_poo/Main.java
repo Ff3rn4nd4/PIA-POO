@@ -28,8 +28,6 @@ public class Main {
                 yy+=1; 
             }
         }
-        System.out.print("Hoy: "+d+"/"+m+"/"+y); 
-        System.out.print("En 6 meses: "+dd+"/"+mm+"/"+yy); 
         try{
             File usuarios = new File("usuarios.txt"); 
             File reservaciones = new File("reservaciones.txt"); 
