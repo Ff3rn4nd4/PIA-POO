@@ -103,7 +103,7 @@ public class ListaClientes {
             else{
                 aux.getSiguiente().setAnterior(aux.getAnterior()); 
             }
-            System.out.println("Paquete eliminado con éxito"); 
+            System.out.println("Cliente eliminado con éxito"); 
         }
     }
     public void mostrarLista(){

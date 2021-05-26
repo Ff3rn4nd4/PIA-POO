@@ -75,6 +75,7 @@ public class ListaReservaciones {
     public void crear(ListaPaquetes listaP, ListaClientes listaC){
         
         int d, m, y;
+        char sn; 
         Excepciones excep = new Excepciones(); 
         System.out.println("Ingrese una fecha para su reservación"); 
         System.out.print("Año: ");
@@ -94,46 +95,62 @@ public class ListaReservaciones {
                     Reservacion nueva = null; 
                     if(getPrimero()==null){
                         nueva = new Reservacion(d, m, y, 0, auxP.getCostoBase()+p*auxP.getCostoVariable(), auxC.getMatricula(), p);  
-                        setPrimero(nueva); 
-                        setUltimo(nueva);
-                        System.out.println("Reservación almacenada con éxito\nSu clave de reservación es: "+nueva.getClave());
-                    }
-                    else if(!reservada(d, m, y)){
-                        nueva = new Reservacion(d, m, y, getClaveMayor(), auxP.getCostoBase()+p*auxP.getCostoVariable(), auxC.getMatricula(), p); 
-                        setClaveMayor(getClaveMayor()+1);
-                        if(nueva.getYear()<getPrimero().getYear() || 
-                                (nueva.getYear()==getPrimero().getYear() && nueva.getMonth()<getPrimero().getMonth()) ||
-                                (nueva.getYear()==getPrimero().getYear() && nueva.getMonth()==getPrimero().getMonth() && nueva.getDay()<getPrimero().getDay())){
-                            nueva.setSiguiente(getPrimero()); 
-                            getPrimero().setAnterior(nueva);
+                        System.out.println("Su total es: $"+nueva.getCosto()); 
+                        System.out.println("¿Acepta su total?\nS--Sí\nN--No");
+                        sn = excep.leerChar('S', 'N'); 
+                        if(sn=='S'){
                             setPrimero(nueva); 
-                            System.out.println("Reservación almacenada con éxito\nSu clave de reservación es: "+nueva.getClave());
-                        }
-                        else if(nueva.getYear()>getUltimo().getYear() ||
-                                (nueva.getYear()==getUltimo().getYear() && nueva.getMonth()>getUltimo().getMonth()) ||
-                                (nueva.getYear()== getUltimo().getYear() && nueva.getMonth()==getUltimo().getMonth() && nueva.getDay()>getUltimo().getDay())){
-                            nueva.setAnterior(getUltimo()); 
-                            getUltimo().setSiguiente(nueva);
-                            setUltimo(nueva); 
+                            setUltimo(nueva);
                             System.out.println("Reservación almacenada con éxito\nSu clave de reservación es: "+nueva.getClave());
                         }
                         else{
-                            Reservacion aux = getPrimero(); 
-                            while(aux!=null){
-                                if(nueva.getYear()<aux.getYear() || (nueva.getYear()==aux.getYear() && nueva.getMonth()<aux.getMonth()) 
-                                        || (nueva.getYear()==aux.getYear() && nueva.getMonth()==aux.getMonth() && nueva.getDay() < aux.getDay())){
-                                    aux.getAnterior().setSiguiente(nueva);
-                                    nueva.setAnterior(aux.getAnterior()); 
-                                    nueva.setSiguiente(aux); 
-                                    aux.setAnterior(nueva);
-                                    break; 
-                                }
-                                else{
-                                    aux = aux.getSiguiente(); 
+                            nueva = null;
+                            System.out.println("Reservación cancelada"); 
+                        }
+                    }
+                    else if(!reservada(d, m, y)){
+                        nueva = new Reservacion(d, m, y, getClaveMayor(), auxP.getCostoBase()+p*auxP.getCostoVariable(), auxC.getMatricula(), p); 
+                        System.out.println("Su total es: $"+nueva.getCosto()); 
+                        System.out.println("¿Acepta su total?\nS--Sí\nN--No");
+                        sn = excep.leerChar('S', 'N');
+                        if(sn=='S'){
+                            setClaveMayor(getClaveMayor()+1);
+                            if(nueva.getYear()<getPrimero().getYear() || 
+                                    (nueva.getYear()==getPrimero().getYear() && nueva.getMonth()<getPrimero().getMonth()) ||
+                                    (nueva.getYear()==getPrimero().getYear() && nueva.getMonth()==getPrimero().getMonth() && nueva.getDay()<getPrimero().getDay())){
+                                nueva.setSiguiente(getPrimero()); 
+                                getPrimero().setAnterior(nueva);
+                                setPrimero(nueva);
+                            }
+                            else if(nueva.getYear()>getUltimo().getYear() ||
+                                    (nueva.getYear()==getUltimo().getYear() && nueva.getMonth()>getUltimo().getMonth()) ||
+                                    (nueva.getYear()== getUltimo().getYear() && nueva.getMonth()==getUltimo().getMonth() && nueva.getDay()>getUltimo().getDay())){
+                                nueva.setAnterior(getUltimo()); 
+                                getUltimo().setSiguiente(nueva);
+                                setUltimo(nueva);
+                            }
+                            else{
+                                Reservacion aux = getPrimero(); 
+                                while(aux!=null){
+                                    if(nueva.getYear()<aux.getYear() || (nueva.getYear()==aux.getYear() && nueva.getMonth()<aux.getMonth()) 
+                                            || (nueva.getYear()==aux.getYear() && nueva.getMonth()==aux.getMonth() && nueva.getDay() < aux.getDay())){
+                                        aux.getAnterior().setSiguiente(nueva);
+                                        nueva.setAnterior(aux.getAnterior()); 
+                                        nueva.setSiguiente(aux); 
+                                        aux.setAnterior(nueva);
+                                        break; 
+                                    }
+                                    else{
+                                        aux = aux.getSiguiente(); 
+                                    }
                                 }
                             }
+                            System.out.println("Reservación almacenada con éxito\nSu clave de reservación es: "+nueva.getClave());
                         }
-                        System.out.println("Reservación almacenada con éxito\nSu clave de reservación es: "+nueva.getClave());
+                        else{
+                            nueva = null;
+                            System.out.println("Reservación cancelada"); 
+                        }
                     }
                     else{
                         System.out.println("La fecha ya está reservada"); 
