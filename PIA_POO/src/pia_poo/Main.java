@@ -14,7 +14,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-
+//El programa utiliza System.console() para leer la contraseña del usuario y evitar que se vea
+//Por tanto, el programa se necesita correr desde la consola
 
 public class Main {
     public static void main(String[] args) {
@@ -30,11 +31,9 @@ public class Main {
         Excepciones excep = new Excepciones(); 
         Console console = System.console();
         
-        listaP.leerArchivo();
-        listaR.leerArchivo();
-        listaC.leerArchivo(); 
+         
         if(console==null){
-            System.out.println("No se puede acceder al programa desde un IDE. Acceda a él desde la línea de comandos"); 
+            System.out.println("No se puede acceder al programa desde un IDE. Acceda a él desde la consola"); 
         }
         else{
             try{
@@ -45,6 +44,9 @@ public class Main {
             catch(IOException e){
                 e.printStackTrace();
             }
+            listaP.leerArchivo();
+            listaR.leerArchivo();
+            listaC.leerArchivo();
             do{
                 System.out.println("<<< BIENVENIDO AL PROGRAMA >>>");
                 System.out.println("\nEste es el sistema de administración de un salón de eventos\n"); 
