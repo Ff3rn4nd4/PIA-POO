@@ -209,7 +209,7 @@ public class ListaReservaciones {
                 System.out.print(mAux+"/"+yAux+" ");
             }
             cont++; 
-            if(cont>10){
+            if(cont==10){
                 System.out.print("\n"); 
                 cont = 0; 
             }

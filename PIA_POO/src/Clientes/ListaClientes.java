@@ -161,24 +161,20 @@ public class ListaClientes {
         String nombre, apellido, email, numcel; 
         Scanner leer = new Scanner(System.in); 
         CustomerData aux = buscar(); 
-        aux.imprimir();
-        System.out.print("Ingrese el primer nombre del cliente: ");
-        nombre = leer.next(); 
-        System.out.print("INgrese el apellido paterno del cliente: "); 
-        apellido = leer.next(); 
-        do{
-            System.out.print("Ingrese un e-mail válido: "); 
-            email = leer.next();
-        }while(!email.contains("@") || !email.contains(".com"));
-        numcel = leer.next(); 
-        while(numcel.length()!=10 || !numcel.matches("[0-9]+")){
-            System.out.print("Ingrese un número telefónico válido: "); 
-            numcel = leer.next();
+        if(aux!=null){
+            aux.imprimir();
+            do{
+                System.out.print("Ingrese un nuevo e-mail válido: "); 
+                email = leer.next();
+            }while(!email.contains("@") || !email.contains(".com"));
+            numcel = leer.next(); 
+            while(numcel.length()!=10 || !numcel.matches("[0-9]+")){
+                System.out.print("Ingrese un nuevo número telefónico válido: "); 
+                numcel = leer.next();
+            }
+            aux.setEmail(email);
+            aux.setNumcel(numcel);
+            System.out.println("Datos actualizados con éxito\n"); 
         }
-        aux.setCustomerName(nombre);
-        aux.setCustomerLastName(apellido);
-        aux.setEmail(email);
-        aux.setNumcel(numcel);
-        System.out.println("Datos actualizados con éxito\n"); 
     }
 }

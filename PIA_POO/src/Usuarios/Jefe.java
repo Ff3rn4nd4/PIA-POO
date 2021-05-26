@@ -1,4 +1,5 @@
 package Usuarios;
+import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,11 +20,12 @@ public class Jefe extends Usuario{
     @Override
     public void crearUsuario(){
         int aux; 
-        String us, usAux, pw, pwAux;
+        String us, usAux, pwAux;
         int clase; 
         boolean existe = false, estado; 
         Scanner leer = new Scanner(System.in); 
         Excepciones excep = new Excepciones(); 
+        Console consola = System.console(); 
         System.out.println("Crear Nuevo Usuario"); 
         System.out.println("Seleccione el tipo de usuario que desea crear: "); 
         System.out.println("0--Jefe\n1--Gerente\n2--Empleado\n3--Ninguno"); 
@@ -51,16 +53,16 @@ public class Jefe extends Usuario{
                 }
                 if(!existe){
                     System.out.print("Ingrese una contraseña: "); 
-                    pw = leer.next(); 
-                    while(pw.contains(us)){
+                    char[] pw = consola.readPassword(); 
+                    while((new String(pw)).contains(us)){
                         System.out.print("El nombre de usuario y la contraseña no pueden ser iguales, ingrese una contraseña distinta: "); 
-                        pw = leer.next(); 
+                        pw = consola.readPassword(); 
                     }
-                    while(pw.length()<5){
+                    while(pw.length<5){
                         System.out.print("Contraseña muy corta, ingrese una contraseña distinta (mínimo 5 caracteres)"); 
-                        pw = leer.next(); 
+                        pw = consola.readPassword(); 
                     }
-                    escritor.write(us+" "+pw+" "+true+" "+aux+" \n");
+                    escritor.write(us+" "+(new String(pw))+" "+true+" "+aux+" \n");
                     System.out.println("Usuario generado con éxito"); 
                 }
                 else{
@@ -78,7 +80,10 @@ public class Jefe extends Usuario{
     public void eliminarUsuario(){
         String linea; 
         String eliminar; 
+        boolean encontrado = false; 
         Scanner sc = new Scanner(System.in); 
+        Excepciones excep = new Excepciones(); 
+        char sn; 
         System.out.println("Eliminar Usuarios"); 
         try{
             File f = new File("usuarios.txt"); 
@@ -95,7 +100,17 @@ public class Jefe extends Usuario{
             while(buffer.hasNext()){
                 linea = buffer.nextLine(); 
                 if(linea.contains(eliminar) && !linea.contains(getUserName())){
-                   System.out.println("Usuario eliminado");  
+                    System.out.println("¿Desea cambiar el estado del usuario?"); 
+                    System.out.println("S--Si\nN--No");
+                    sn = excep.leerChar('S', 'N'); 
+                    if(sn=='S'){
+                        System.out.println("Usuario eliminado");
+                    }
+                    else{
+                        System.out.println("No se eliminó al usuario");
+                        escritor.write(linea+"\n");
+                    }
+                    encontrado = true; 
                 }
                 else{
                     escritor.write(linea+"\n");
@@ -110,6 +125,9 @@ public class Jefe extends Usuario{
             copiar.close();
             pegar.close();
             aux.delete(); 
+            if(!encontrado){
+                System.out.println("No se encontró al usuario \""+eliminar+"\""); 
+            }
         }
         catch(IOException e){
             e.printStackTrace();
@@ -120,7 +138,7 @@ public class Jefe extends Usuario{
         String us; 
         Scanner sc = new Scanner(System.in); 
         String usAux, pwAux; 
-        boolean activo; 
+        boolean activo, encontrado = false; 
         int categoria; 
         char sn; 
         Excepciones excep = new Excepciones(); 
@@ -162,6 +180,7 @@ public class Jefe extends Usuario{
                             System.out.println("Usuario modificado con éxito"); 
                         }
                         escritor.write(usAux+" "+pwAux+" "+activo+" "+categoria+" \n");
+                        encontrado = true; 
                     }
                 }
                 escritor.close();
@@ -170,6 +189,9 @@ public class Jefe extends Usuario{
                 while(copiar.hasNext()){
                     linea = copiar.nextLine(); 
                     pegar.write(linea+"\n"); 
+                }
+                if(!encontrado){
+                    System.out.println("No se encontró al usuario \""+us+"\"");
                 }
                 copiar.close();
                 pegar.close();

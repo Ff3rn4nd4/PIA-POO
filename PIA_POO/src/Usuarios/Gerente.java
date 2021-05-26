@@ -1,4 +1,5 @@
 package Usuarios;
+import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,11 +17,12 @@ public class Gerente extends Usuario{
     @Override
     public void crearUsuario(){
         char sn; 
-        String us, usAux, pw, pwAux; 
+        String us, usAux, pwAux; 
         int categoria; 
         boolean activo, existe = false; 
         Scanner leer = new Scanner(System.in); 
         Excepciones excep = new Excepciones(); 
+        Console consola = System.console(); 
         System.out.println("Crear Nuevo Usuario"); 
         System.out.println("Desea crear un nuevo usuario nivel empleado?"); 
         System.out.println("S--Si\nN--No\n"); 
@@ -48,15 +50,16 @@ public class Gerente extends Usuario{
                 }
                 if(!existe){
                     System.out.print("Ingrese una contraseña: "); 
-                    pw = leer.next(); 
-                    while(!pw.contains(us)){
+                    char[] pw = consola.readPassword(); 
+                    while((new String(pw)).contains(us)){
                         System.out.print("La contraseña no puede contener al nombre de usuario, ingrese una contraseña distinta: "); 
+                        pw = consola.readPassword();
                     }
-                    while(pw.length()<5){
+                    while(pw.length<5){
                         System.out.print("Contraseña muy corta, ingrese una contraseña distinta (mínimo 5 caracteres)"); 
-                        pw = leer.next(); 
+                        pw = consola.readPassword(); 
                     }
-                    escritor.write(us+" "+pw+" "+true+" "+2+" \n"); 
+                    escritor.write(us+" "+(new String(pw))+" "+true+" "+2+" \n"); 
                     System.out.println("Usuario generado con éxito"); 
                 }
                 else{
