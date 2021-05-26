@@ -86,4 +86,10 @@ public class Excepciones {
         }while(error); 
         return f; 
     }
+    public String leerString(){
+        Scanner leerI = new Scanner(System.in); 
+        String input = leer.next(); 
+        leerI = new Scanner(System.in); 
+        return input; 
+    }
 }

@@ -60,10 +60,10 @@ public class Main {
                             System.out.println("No hay usuarios registrados en el sistema"); 
                             System.out.println("Se creará un nuevo usuario nivel \"Jefe\""); 
                             System.out.print("Ingrese un nombre de usuario (no debe contener espacios): ");  
-                            String userName = leer.next();
+                            String userName = excep.leerString(); 
                             while(userName.length()<5){
                                 System.out.print("Nombre de usuario muy corto, ingrese otro nombre de usuario (mínimo 5 caracteres): "); 
-                                userName = leer.next();
+                                userName = excep.leerString(); 
                             }
                             System.out.print("Ingrese una contraseña: ");
                             char[] password = console.readPassword(); 
@@ -119,7 +119,7 @@ public class Main {
                         do{
                             System.out.println("Seleccione una opción: "); 
                             System.out.println("1--Panel de Administración\n2--Reservaciones\n3--Cerrar Sesión"); 
-                            menu = excep.leerInt(1, 4); 
+                            menu = excep.leerInt(1, 3); 
                             switch(menu){
                                 case 1: 
                                     do{
@@ -174,7 +174,7 @@ public class Main {
                                                 do{
                                                     System.out.println("Menu de Clientes"); 
                                                     System.out.println("1--Registrar Cliente\n2--Buscar Cliente por matrícuala\n3--Eliminar Cliente\n4--Mostrar lista de clientes\n5--Actualizar Datos de un Cliente\n6--Salir"); 
-                                                    sub1=excep.leerInt(1, 5); 
+                                                    sub1=excep.leerInt(1, 6); 
                                                     switch(sub1){
                                                         case 1: 
                                                             listaC.crear();

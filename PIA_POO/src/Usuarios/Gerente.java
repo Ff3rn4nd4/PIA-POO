@@ -19,8 +19,7 @@ public class Gerente extends Usuario{
         char sn; 
         String us, usAux, pwAux; 
         int categoria; 
-        boolean activo, existe = false; 
-        Scanner leer = new Scanner(System.in); 
+        boolean activo, existe = false;
         Excepciones excep = new Excepciones(); 
         Console consola = System.console(); 
         System.out.println("Crear Nuevo Usuario"); 
@@ -29,10 +28,10 @@ public class Gerente extends Usuario{
         sn =  excep.leerChar('S', 'N');
         if(sn == 'S'){
             System.out.print("Ingrese un nombre de usuario: "); 
-            us = leer.next(); 
+            us = excep.leerString(); 
             while(us.length()<5){
                 System.out.print("Nombre de usuario muy corto, ingrese otro nombre de usuario (mínimo 5 caracteres): "); 
-                us = leer.next(); 
+                us = excep.leerString(); 
             }
             try{
                 File archivo = new File("usuarios.txt"); 
@@ -76,9 +75,9 @@ public class Gerente extends Usuario{
     @Override
     public void eliminarUsuario(){
         String linea; 
-        String eliminar; 
-        Scanner sc = new Scanner(System.in);
+        String eliminar;
         boolean encontrado = false; 
+        Excepciones excep = new Excepciones(); 
         System.out.println("Eliminar Usuarios"); 
         try{
             File f = new File("usuarios.txt"); 
@@ -90,7 +89,7 @@ public class Gerente extends Usuario{
             
             
             System.out.print("¿Qué usuario desea eliminar? "); 
-            eliminar = sc.next(); 
+            eliminar = excep.leerString(); 
             if(eliminar.equals(getUserName())){
                 System.out.println("No se puede eliminar al usuario activo"); 
             }
@@ -129,8 +128,7 @@ public class Gerente extends Usuario{
     }
     @Override
     public void cambiarEstado(){
-        String us; 
-        Scanner sc = new Scanner(System.in); 
+        String us;
         String usAux, pwAux; 
         boolean activo; 
         int categoria; 
@@ -145,7 +143,7 @@ public class Gerente extends Usuario{
             FileWriter escritor = new FileWriter(aux); 
             Scanner copiar = new Scanner(aux); 
             System.out.print("Ingrese el nombre del usuario que desea modificar: ");  
-            us = sc.next(); 
+            us = excep.leerString(); 
             if(us.equals(getUserName())){
                 System.out.println("No se puede eliminar al usuario activo"); 
             }
