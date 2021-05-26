@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
+import pia_poo.Excepciones;
 
 public class ListaReservaciones {
     private Reservacion primero, ultimo; 
@@ -17,7 +18,6 @@ public class ListaReservaciones {
     private int claveMayor;
     private int hoyD, hoyM, hoyY;
     private LocalDate hoy = LocalDate.now();
-    @SuppressWarnings("empty-statement")
     public ListaReservaciones(){
         this.calendario = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         this.primero = null; 
@@ -52,17 +52,11 @@ public class ListaReservaciones {
             Scanner leerArchivo = new Scanner(archivo); 
             Reservacion nuevo = null; 
             while(leerArchivo.hasNext()){
-                int day = leerArchivo.nextInt(); 
-                int month = leerArchivo.nextInt(); 
-                int year = leerArchivo.nextInt(); 
-                int clave = leerArchivo.nextInt(); 
-                if(clave>getClaveMayor()){
-                    setClaveMayor(clave+1); 
+                nuevo = new Reservacion(leerArchivo.nextInt(), leerArchivo.nextInt(), leerArchivo.nextInt(), leerArchivo.nextInt(), leerArchivo.nextFloat(),
+                        leerArchivo.nextInt(), leerArchivo.nextInt()); 
+                if(nuevo.getClave()==getClaveMayor()){
+                    setClaveMayor(nuevo.getClave()+1); 
                 }
-                float costo = leerArchivo.nextFloat(); 
-                int matricula = leerArchivo.nextInt(); 
-                int personas = leerArchivo.nextInt();
-                nuevo = new Reservacion(day, month, year, clave, costo, matricula, personas); 
                 if(getPrimero()==null){
                     setPrimero(nuevo); 
                     setUltimo(nuevo); 
@@ -80,23 +74,21 @@ public class ListaReservaciones {
     }
     public void crear(ListaPaquetes listaP, ListaClientes listaC){
         
-        int d, m, y; 
-        Scanner leer = new Scanner(System.in); 
+        int d, m, y;
+        Excepciones excep = new Excepciones(); 
         System.out.println("Ingrese una fecha para su reservación"); 
         System.out.print("Año: ");
-        y = leer.nextInt(); 
+        y = excep.leerInt(getHoyY(), getHoyY()+1); 
         System.out.print("Mes (dígito): "); 
-        m = leer.nextInt(); 
+        m = excep.leerInt(1, 12); 
         System.out.print("Día: "); 
-        d = leer.nextInt();
+        d = excep.leerInt(1, getCalendario()[m-1]); 
         if(fechaValida(d, m, y)){
             Paquete auxP = listaP.buscar(); 
             if(auxP!=null){
                 int p; 
-                do{
-                    System.out.println("¿Cuántas personas asistirán a su evento?"); 
-                    p = leer.nextInt(); 
-                }while(p<1 || p>100); 
+                System.out.println("¿Cuántas personas asistirán a su evento?"); 
+                p = excep.leerInt(1, 100); 
                 CustomerData auxC = listaC.buscar(); 
                 if(auxC!=null){
                     Reservacion nueva = null; 
@@ -117,9 +109,9 @@ public class ListaReservaciones {
                             setPrimero(nueva); 
                             System.out.println("Reservación almacenada con éxito\nSu clave de reservación es: "+nueva.getClave());
                         }
-                        else if(nueva.getYear()>getPrimero().getYear() ||
-                                (nueva.getYear()==getPrimero().getYear() && nueva.getMonth()>getPrimero().getMonth()) ||
-                                (nueva.getYear()== getPrimero().getYear() && nueva.getMonth()==getPrimero().getMonth() && nueva.getDay()>getPrimero().getDay())){
+                        else if(nueva.getYear()>getUltimo().getYear() ||
+                                (nueva.getYear()==getUltimo().getYear() && nueva.getMonth()>getUltimo().getMonth()) ||
+                                (nueva.getYear()== getUltimo().getYear() && nueva.getMonth()==getUltimo().getMonth() && nueva.getDay()>getUltimo().getDay())){
                             nueva.setAnterior(getUltimo()); 
                             getUltimo().setSiguiente(nueva);
                             setUltimo(nueva); 
@@ -153,7 +145,6 @@ public class ListaReservaciones {
     }
     public boolean fechaValida(int d, int m, int y){
         int futuroD = getHoyD()+180, futuroM = getHoyM(), futuroY=getHoyY(); 
-        Scanner leer = new Scanner(System.in); 
         
         
         while(futuroD>getCalendario()[futuroM-1]){
@@ -164,11 +155,7 @@ public class ListaReservaciones {
                 futuroY++; 
             }
         }
-        if(m<1 || m>12 || d<1 || d>getCalendario()[m-1]){
-            System.out.println("Día o Mes incorrectos"); 
-            return false; 
-        }
-        else if(y<getHoyY() || (y== getHoyY() && m<getHoyM()) || (y == getHoyY() && m == getHoyM() && d < getHoyD())){
+        if(y<getHoyY() || (y== getHoyY() && m<getHoyM()) || (y == getHoyY() && m == getHoyM() && d < getHoyD())){
             System.out.println("La fecha ingresada es anterior a la fecha actual, no se puede registrar");
             return false; 
         }
@@ -288,9 +275,9 @@ public class ListaReservaciones {
     }
     public Reservacion buscar(){
         Reservacion auxR = getPrimero(); 
-        System.out.print("Ingrese la clave de la reservación que desea buscar: "); 
-        Scanner leer = new Scanner(System.in); 
-        int clave = leer.nextInt(); 
+        System.out.print("Ingrese la clave de la reservación que desea buscar: ");
+        Excepciones excep = new Excepciones(); 
+        int clave = excep.leerInt(); 
         while(auxR!=null){
             if(auxR.getClave()==clave){
                 return auxR; 

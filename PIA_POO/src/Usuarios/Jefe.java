@@ -3,8 +3,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import pia_poo.Excepciones;
 
 public class Jefe extends Usuario{
+    public Jefe(String userName, String password, boolean activo) {
+        super(userName, password, activo);
+    }
     public Jefe(String userName, String password){
         super(userName, password); 
     }
@@ -18,39 +22,45 @@ public class Jefe extends Usuario{
         String us, usAux, pw, pwAux;
         int clase; 
         boolean existe = false, estado; 
-        Scanner lectura = new Scanner(System.in); 
+        Scanner leer = new Scanner(System.in); 
+        Excepciones excep = new Excepciones(); 
+        System.out.println("Crear Nuevo Usuario"); 
         System.out.println("Seleccione el tipo de usuario que desea crear: "); 
         System.out.println("0--Jefe\n1--Gerente\n2--Empleado\n3--Ninguno"); 
-        do{
-            aux = lectura.nextInt(); 
-        }while(aux <0 || aux>3);
+        aux = excep.leerInt(0, 3); 
         if(aux !=3){
             System.out.print("Ingrese el nombre de usuario: "); 
-            us = lectura.next();
+            us = leer.next();
             while(us.length()<5){
                 System.out.print("Nombre de usuario muy corto, ingrese otro nombre de usuario (mínimo 5 caracteres): "); 
-                us = lectura.next(); 
+                us = leer.next(); 
             }
             try{
                 File archivo = new File("usuarios.txt"); 
                 Scanner leerArchivo = new Scanner(archivo);
                 FileWriter escritor = new FileWriter(archivo, true); 
-                while(leerArchivo.hasNext()){
-                    usAux = leerArchivo.next(); 
-                    pwAux = leerArchivo.next();
-                    clase = leerArchivo.nextInt();
-                    if(us.equals(usAux)){
+                while(leerArchivo.hasNext()&&existe==false){
+                    if(us.equals(leerArchivo.next())){
                         existe=true; 
+                    }
+                    else{
+                        leerArchivo.next(); 
+                        leerArchivo.nextBoolean(); 
+                        leerArchivo.nextInt(); 
                     }
                 }
                 if(!existe){
                     System.out.print("Ingrese una contraseña: "); 
-                    pw = lectura.next(); 
+                    pw = leer.next(); 
+                    while(pw.contains(us)){
+                        System.out.print("El nombre de usuario y la contraseña no pueden ser iguales, ingrese una contraseña distinta: "); 
+                        pw = leer.next(); 
+                    }
                     while(pw.length()<5){
                         System.out.print("Contraseña muy corta, ingrese una contraseña distinta (mínimo 5 caracteres)"); 
-                        pw = lectura.next(); 
+                        pw = leer.next(); 
                     }
-                    escritor.write(us+" "+pw+" "+aux+" \n");
+                    escritor.write(us+" "+pw+" "+true+" "+aux+" \n");
                     System.out.println("Usuario generado con éxito"); 
                 }
                 else{
@@ -69,15 +79,14 @@ public class Jefe extends Usuario{
         String linea; 
         String eliminar; 
         Scanner sc = new Scanner(System.in); 
+        System.out.println("Eliminar Usuarios"); 
         try{
             File f = new File("usuarios.txt"); 
             Scanner buffer = new Scanner(f); 
             File aux = new File("auxiliar.txt"); 
             aux.createNewFile(); 
             FileWriter escritor = new FileWriter(aux); 
-            Scanner copiar = new Scanner(aux); 
-            
-            
+            Scanner copiar = new Scanner(aux);
             System.out.print("¿Qué usuario desea eliminar? "); 
             eliminar = sc.next(); 
             if(eliminar.equals(getUserName())){
@@ -105,5 +114,70 @@ public class Jefe extends Usuario{
         catch(IOException e){
             e.printStackTrace();
         }
+    }
+    @Override
+    public void cambiarEstado(){
+        String us; 
+        Scanner sc = new Scanner(System.in); 
+        String usAux, pwAux; 
+        boolean activo; 
+        int categoria; 
+        char sn; 
+        Excepciones excep = new Excepciones(); 
+        try{
+            File f = new File("usuarios.txt"); 
+            Scanner buffer = new Scanner(f); 
+            File aux = new File("auxiliar.txt"); 
+            aux.createNewFile(); 
+            FileWriter escritor = new FileWriter(aux); 
+            Scanner copiar = new Scanner(aux); 
+            System.out.print("Ingrese el nombre del usuario que desea modificar: ");  
+            us = sc.next(); 
+            if(us.equals(getUserName())){
+                System.out.println("No se puede eliminar al usuario activo"); 
+            }
+            else{
+                while(buffer.hasNext()){
+                    usAux = buffer.next(); 
+                    pwAux = buffer.next(); 
+                    activo = buffer.nextBoolean(); 
+                    categoria = buffer.nextInt();
+                    if(!usAux.equals(us)){
+                        escritor.write(usAux+" "+pwAux+" "+activo+" "+categoria+" \n");  
+                    }
+                    else{
+                        System.out.print("Usuario: "+usAux); 
+                        System.out.print("Estado: "); 
+                        if(activo){
+                            System.out.println("Activo"); 
+                        }
+                        else{
+                            System.out.println("Inactivo"); 
+                        }
+                        System.out.println("¿Desea cambiar el estado del usuario?"); 
+                        System.out.println("S--Si\nN--No"); 
+                        sn = excep.leerChar('S', 'N'); 
+                        if(sn=='S'){
+                            activo = !activo; 
+                            System.out.println("Usuario modificado con éxito"); 
+                        }
+                        escritor.write(usAux+" "+pwAux+" "+activo+" "+categoria+" \n");
+                    }
+                }
+                escritor.close();
+                FileWriter pegar = new FileWriter(f); 
+                String linea; 
+                while(copiar.hasNext()){
+                    linea = copiar.nextLine(); 
+                    pegar.write(linea+"\n"); 
+                }
+                copiar.close();
+                pegar.close();
+                aux.delete(); 
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        } 
     }
 }

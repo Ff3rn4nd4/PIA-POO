@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import pia_poo.Excepciones;
 
 public class ListaClientes {
     private CustomerData primero, ultimo; 
@@ -27,9 +28,9 @@ public class ListaClientes {
     public CustomerData buscar(){
         CustomerData aux = getPrimero(); 
         int matricula; 
-        Scanner leer = new Scanner(System.in); 
+        Excepciones excep = new Excepciones(); 
         System.out.print("Ingrese la matrícula del cliente que desea buscar: "); 
-        matricula = leer.nextInt(); 
+        matricula = excep.leerInt(); 
         while(aux!=null){
             if(aux.getMatricula()==matricula){
                 return aux; 
@@ -57,19 +58,19 @@ public class ListaClientes {
         System.out.println("Crear Cliente");
         Scanner leer = new Scanner(System.in); 
         System.out.print("Ingrese el primer nombre del cliente: "); 
-        String customerName = leer.next(); 
+        String customerName = leer.next();
         System.out.print("Ingrese el primer apellido del cliente: "); 
         String customerLastName = leer.next();
-        String email; 
+        String email;
         do{
             System.out.print("Ingrese un e-mail válido: "); 
-            email = leer.next(); 
+            email = leer.next();
         }while(!email.contains("@") || !email.contains(".com"));
         System.out.print("Ingrese su numero telefonico (10 dígitos): "); 
         String numcel = leer.next();
         while(numcel.length()!=10 || !numcel.matches("[0-9]+")){
             System.out.print("Ingrese un número telefónico válido: "); 
-            numcel = leer.next(); 
+            numcel = leer.next();
         }
         CustomerData nuevo; 
         if(getPrimero()==null){
@@ -155,5 +156,29 @@ public class ListaClientes {
         catch(IOException e){
             e.printStackTrace();
         }
+    }
+    public void actualizarDatos(){
+        String nombre, apellido, email, numcel; 
+        Scanner leer = new Scanner(System.in); 
+        CustomerData aux = buscar(); 
+        aux.imprimir();
+        System.out.print("Ingrese el primer nombre del cliente: ");
+        nombre = leer.next(); 
+        System.out.print("INgrese el apellido paterno del cliente: "); 
+        apellido = leer.next(); 
+        do{
+            System.out.print("Ingrese un e-mail válido: "); 
+            email = leer.next();
+        }while(!email.contains("@") || !email.contains(".com"));
+        numcel = leer.next(); 
+        while(numcel.length()!=10 || !numcel.matches("[0-9]+")){
+            System.out.print("Ingrese un número telefónico válido: "); 
+            numcel = leer.next();
+        }
+        aux.setCustomerName(nombre);
+        aux.setCustomerLastName(apellido);
+        aux.setEmail(email);
+        aux.setNumcel(numcel);
+        System.out.println("Datos actualizados con éxito\n"); 
     }
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import pia_poo.Excepciones;
 
 public class ListaPaquetes {
     private Paquete primero, ultimo; 
@@ -47,15 +48,15 @@ public class ListaPaquetes {
         }
     }
     public void crear(){
-        float cBase, cVar; 
-        Scanner leer = new Scanner(System.in); 
+        float cBase, cVar;
         Paquete nuevo = null; 
+        Excepciones excep = new Excepciones(); 
         System.out.println("CREAR PAQUETES"); 
         System.out.println("Un paquete consiste en el costo base y en el costo variable (por persona)"); 
         System.out.print("Ingrese el costo base del paquete a crear: "); 
-        cBase = leer.nextFloat(); 
+        cBase = excep.leerFloat(); 
         System.out.print("Ingrese el costo variable del paquete a crear: "); 
-        cVar = leer.nextFloat(); 
+        cVar = excep.leerFloat(); 
         if(getPrimero()==null){
             nuevo = new Paquete(1, cBase, cVar); 
             setPrimero(nuevo); 
@@ -102,9 +103,9 @@ public class ListaPaquetes {
     }
     public Paquete buscar(){
         Paquete aux = getPrimero(); 
-        System.out.print("Ingrese el # del paquete que desea buscar: "); 
-        Scanner leer = new Scanner(System.in); 
-        int num = leer.nextInt(); 
+        System.out.print("Ingrese el # del paquete que desea buscar: ");
+        Excepciones excep = new Excepciones(); 
+        int num = excep.leerInt(); 
         while(aux!=null){
             if(aux.getNum()==num){
                 return aux; 
@@ -130,5 +131,18 @@ public class ListaPaquetes {
         catch(IOException e){
             e.printStackTrace();
         }
+    }
+    public void actualizarDatos(){
+        Paquete aux = buscar(); 
+        aux.imprimir();
+        float cBase, cVar; 
+        Excepciones excep = new Excepciones(); 
+        System.out.print("Ingrese el nuevo costo base del paquete: "); 
+        cBase = excep.leerFloat(); 
+        System.out.print("Ingrese el nuevo costo variable del paquete: "); 
+        cVar = excep.leerFloat(); 
+        aux.setCostoBase(cBase);
+        aux.setCostoVariable(cVar);
+        System.out.println("Datos del paquete #"+aux.getNum()+" actualizados con éxito"); 
     }
 }

@@ -11,7 +11,6 @@ import Usuarios.Usuario;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Scanner;
 
 
@@ -19,7 +18,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
          
-        short menu, opc, sub, sub1;
+        int menu, opc, sub, sub1;
         Scanner leer = new Scanner(System.in); 
         boolean encontrado = false; 
         boolean validar; 
@@ -27,6 +26,8 @@ public class Main {
         ListaClientes listaC = new ListaClientes(); 
         ListaReservaciones listaR = new ListaReservaciones(); 
         ListaPaquetes listaP = new ListaPaquetes(); 
+        Excepciones excep = new Excepciones(); 
+        
         
         listaP.leerArchivo();
         listaR.leerArchivo();
@@ -40,13 +41,10 @@ public class Main {
             e.printStackTrace();
         }
         do{
-            System.out.println("    <<< BIENVENIDO AL PROGRAMA >>>");
-            System.out.println("\n\nEste es el sistema de administración de un salón de eventos\n\n"); 
-            do{
-                System.out.println("0--Iniciar Sesión\n1--Cerrar el programa"); 
-                opc = leer.nextShort(); 
-                
-            }while(!valido(0, 1, opc)); 
+            System.out.println("<<< BIENVENIDO AL PROGRAMA >>>");
+            System.out.println("\nEste es el sistema de administración de un salón de eventos\n"); 
+            System.out.println("0--Iniciar Sesión\n1--Cerrar el programa"); 
+            opc = excep.leerInt(0, 1); 
             if(opc==0){
                 try{
                     File usuarios = new File("usuarios.txt"); 
@@ -55,49 +53,47 @@ public class Main {
                         System.out.println("No hay usuarios registrados en el sistema"); 
                         System.out.println("Se creará un nuevo usuario nivel \"Jefe\""); 
                         System.out.print("Ingrese un nombre de usuario (no debe contener espacios): ");  
-                        String userName = leer.next(); 
+                        String userName = leer.next();
                         while(userName.length()<5){
                             System.out.print("Nombre de usuario muy corto, ingrese otro nombre de usuario (mínimo 5 caracteres): "); 
-                            userName = leer.next(); 
+                            userName = leer.next();
                         }
                         System.out.print("Ingrese una contraseña: "); 
-                        String password = leer.next();  
+                        String password = leer.next();
                         while(password.length()<5){
                             System.out.print("Contraseña muy corta, ingrese una contraseña distinta (mínimo 5 caracteres)"); 
-                            password = leer.next(); 
+                            password = leer.next();
                         }
                         user = new Jefe(userName, password); 
                         FileWriter escritor = new FileWriter(usuarios); 
-                        escritor.write(user.getUserName()+" "+user.getPassword()+" "+0+"\n"); 
+                        escritor.write(user.getUserName()+" "+user.getPassword()+" "+true+" "+0+"\n"); 
                         escritor.close();
                         System.out.println("Usuario creado con éxito"); 
                         encontrado = true; 
                     }
                     else{
                         System.out.print("Ingrese su nombre de usuario: "); 
-                        String userName = leer.next(); 
-                        
+                        String userName = leer.next();
                         System.out.print("Ingrese su contraseña: "); 
-                        String password = leer.next(); 
-                        
-                        while(leerArchivo.hasNext()){
-                            String userAux = leerArchivo.next(); 
+                        String password = leer.next();
+                        while(leerArchivo.hasNext()&&encontrado==false){
+                            String usAux = leerArchivo.next(); 
                             String pwAux = leerArchivo.next(); 
-                            short clase = leerArchivo.nextShort();
-                            if(userName.equals(userAux) && password.equals(pwAux)){
-                                switch(clase){
+                            boolean activo = leerArchivo.nextBoolean(); 
+                            int categoria = leerArchivo.nextInt(); 
+                            if(userName.equals(usAux) && password.equals(pwAux)){
+                                switch(categoria){
                                     case 0: 
-                                        user = new Jefe(userName, password); 
+                                        user = new Jefe(userName, password, activo); 
                                         break; 
                                     case 1: 
-                                        user = new Gerente(userName, password); 
+                                        user = new Gerente(userName, password, activo); 
                                         break; 
                                     default: 
-                                        user = new Usuario(userName, password); 
+                                        user = new Usuario(userName, password, activo); 
                                         break; 
                                 }
                                 encontrado = true; 
-                                break; 
                             }
                         }
                     }
@@ -105,62 +101,89 @@ public class Main {
                 catch(IOException e){
                     e.printStackTrace();
                 }
-                if(encontrado){
+                if(encontrado && user.isActivo()){
                     System.out.println("\nBienvenido "+user.getUserName()); 
                     do{
                         System.out.println("Seleccione una opción: "); 
                         System.out.println("1--Panel de Administración\n2--Reservaciones\n3--Cerrar Sesión"); 
-                        menu = leer.nextShort(); 
+                        menu = excep.leerInt(1, 4); 
                         switch(menu){
                             case 1: 
                                 do{
                                     System.out.println("Panel de Administración"); 
                                     System.out.println("Nivel: "+user.nivel()); 
                                     System.out.println("Opciones: "); 
-                                    System.out.println("1--Crear nuevo usuario\n2--Eliminar Usuario\n3--Crear Paquete\n4--Mostrar Paquetes\n5--Eliminar Paquete"
-                                            + "\n6--Registrar Cliente\n7--Buscar Cliente por Matrícula\n8--Eliminar Cliente\n9--Mostrar Lista de Clientes\n10--Salir\n");  
-                                    sub = leer.nextShort(); 
+                                    System.out.println("1--Menú de Usuarios\n2--Menú de Paquetes\n3--Menú de Clientes\n4--Salir\n");  
+                                    sub = excep.leerInt(1, 4);  
                                     switch(sub){
                                         case 1: 
-                                            System.out.println("Crear nuevo usuario"); 
-                                            user.crearUsuario();
+                                            do{
+                                                System.out.println("Menu de Usuarios"); 
+                                                System.out.println("1--Crear nuevo usuario\n2--Eliminar Usuario\n3---Activar/Desactivar Usuario\n4--Salir\n"); 
+                                                sub1 = excep.leerInt(1, 4);
+                                                switch(sub1){
+                                                    case 1: 
+                                                        user.crearUsuario();
+                                                        break; 
+                                                    case 2: 
+                                                        user.eliminarUsuario();
+                                                        break; 
+                                                    case 3: 
+                                                        user.cambiarEstado();
+                                                        break;
+                                                }
+                                            }while(sub1!=4); 
                                             break; 
                                         case 2: 
-                                            System.out.println("Eliminar usuario"); 
-                                            user.eliminarUsuario();
+                                            do{
+                                                System.out.println("Menú de Paquetes"); 
+                                                System.out.println("1--Crear Paquete\n2--Eliminar Paquete\n3--Mostrar lista de Paquetes\n4--Salir\n"); 
+                                                sub1 = excep.leerInt(1, 4);
+                                                switch(sub1){
+                                                    case 1: 
+                                                        listaP.crear();
+                                                        break; 
+                                                    case 2: 
+                                                        listaP.eliminar();
+                                                        break; 
+                                                    case 3: 
+                                                        listaP.mostrarLista();
+                                                        break; 
+                                                }
+                                            }while(sub1!=4); 
                                             break; 
                                         case 3: 
-                                            listaP.crear();
+                                            do{
+                                                System.out.println("Menu de Clientes"); 
+                                                System.out.println("1--Registrar Cliente\n2--Buscar Cliente por matrícuala\n3--Eliminar Cliente\n4--Mostrar lista de clientes\n5--Actualizar Datos de un Cliente\n6--Salir"); 
+                                                sub1=excep.leerInt(1, 5); 
+                                                switch(sub1){
+                                                    case 1: 
+                                                        listaC.crear();
+                                                        break; 
+                                                    case 2: 
+                                                        CustomerData aux = listaC.buscar(); 
+                                                        if(aux!=null){
+                                                            aux.imprimir();
+                                                        }
+                                                        break; 
+                                                    case 3: 
+                                                        listaC.eliminar();
+                                                        break; 
+                                                    case 4: 
+                                                        listaC.mostrarLista();
+                                                        break; 
+                                                    case 5: 
+                                                        listaC.actualizarDatos();
+                                                        break; 
+                                                }
+                                            }while(sub1!=5); 
                                             break; 
                                         case 4: 
-                                            listaP.mostrarLista();
-                                            break; 
-                                        case 5:
-                                            listaP.eliminar();
-                                            break; 
-                                        case 6: 
-                                            listaC.crear();
-                                            break; 
-                                        case 7: 
-                                            CustomerData aux = listaC.buscar(); 
-                                            if(aux!=null){
-                                                aux.imprimir();
-                                            }
-                                            break; 
-                                        case 8: 
-                                            listaC.eliminar();
-                                            break; 
-                                        case 9: 
-                                            listaC.mostrarLista();
-                                            break; 
-                                        case 10: 
                                             System.out.println("Saliendo del Panel de Administración..."); 
-                                            break; 
-                                        default: 
-                                            System.out.println("Opción inválida"); 
-                                            break; 
+                                            break;
                                     }
-                                }while(sub!=10); 
+                                }while(sub!=4); 
                                 
                                 break; 
                             case 2: 
@@ -168,7 +191,7 @@ public class Main {
                                     System.out.println("\nPanel de Reservaciones"); 
                                     System.out.println("\n1--Reservar Fecha\n2--Ver fechas disponibles\n3--Eliminar Reservacion\n4--Mostrar Reservaciones\n5--Buscar Reservación por Clave"
                                             + "\n6--Salir"); 
-                                    sub = leer.nextShort(); 
+                                    sub = excep.leerInt(1, 6);  
                                     switch(sub){
                                         case 1: 
                                             listaR.crear(listaP, listaC);
@@ -197,10 +220,7 @@ public class Main {
                                             break; 
                                         case 6: 
                                             System.out.println("Saliendo del Panel de Reservaciones..."); 
-                                            break; 
-                                        default: 
-                                            System.out.println("Seleccione una opción válida"); 
-                                            break; 
+                                            break;
                                     }
                                 }while(sub!=6); 
                                 break; 
@@ -208,16 +228,15 @@ public class Main {
                                 System.out.println("Sesión finalizada"); 
                                 encontrado = false; 
                                 user = null; 
-                                break; 
-                            default: 
-                                System.out.println("Ingrese una opción válida"); 
-                                break; 
+                                break;
                         }
                     }while(menu!=3); 
                 }
+                else if(encontrado && !user.isActivo()){
+                    System.out.println("El usuario ingresado se encuentra inactivo\n"); 
+                }
                 else{
-                    System.out.println("\nUsuario o contraseña incorrectos o inexistentes"); 
-                    
+                    System.out.println("\nUsuario o contraseña incorrectos o inexistentes");  
                 }
             }
         }while(opc!=1);
@@ -225,8 +244,5 @@ public class Main {
         listaR.almacenar();
         listaC.almacenar();
         System.out.println("Adios"); 
-    }
-    static boolean valido(int min, int max, int entrada){ 
-        return !(entrada<min || entrada>max);
     }
 }

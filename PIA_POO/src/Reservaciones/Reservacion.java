@@ -83,26 +83,10 @@ public class Reservacion {
     public void setAsistentes(int asistentes) {
         this.asistentes = asistentes;
     }
-    public boolean costoEstimado(){
-        char sn; 
-        boolean aceptado; 
-        System.out.println("Su costo estimado es "+getCosto());
-        System.out.println("¿Esta de acuerdo con él?\nS--Sí\nN--No"); 
-        Scanner leer = new Scanner(System.in); 
-        sn = leer.next().charAt(0); 
-        while(sn!='s' && sn != 'S' && sn != 'N' && sn != 'n'){
-            System.out.println("Ingrese S o N"); 
-            sn = leer.next().charAt(0); 
-        }
-        return sn == 's' || sn =='S';
-    }
     public void imprimir(){
         System.out.println("Fecha: "+getDay()+"/"+getMonth()+"/"+getYear()); 
         System.out.println("Costo: "+getCosto());
         System.out.println("Asistentes: "+getAsistentes()); 
         System.out.println("Clave de reservación: "+getClave());
-    }
-    public float calcularCosto(float cBase, float cVar, int p){
-        return cBase+cVar*p; 
     }
 }

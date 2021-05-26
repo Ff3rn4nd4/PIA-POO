@@ -1,13 +1,25 @@
 
 package Usuarios;
+
+import Usuarios.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 
 public class Usuario implements Permiso{
     private String userName, password;
+    private boolean activo; 
     public Usuario(String userName, String password){
         this.userName = userName; 
         this.password = password;
+        this.activo = true; 
+    }
+    public Usuario(String userName, String password, boolean activo){
+        this.userName = userName; 
+        this.password = password; 
+        this.activo = activo; 
     }
     public String getUserName() {
         return userName;
@@ -21,16 +33,25 @@ public class Usuario implements Permiso{
     public void setPassword(String password) {
         this.password = password;
     }
+    public boolean isActivo() {
+        return activo;
+    }
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
     public String nivel(){
         return "Empleado"; 
     }
     @Override
     public void crearUsuario() {
-        System.out.println(this.userName+" no tiene permiso de crear nuevos usuarios");
+        System.out.println("No tiene permiso de crear nuevos usuarios");
     }
-
     @Override
     public void eliminarUsuario() {
-        System.out.println(this.userName+" no tiene permiso de eliminar usuarios"); 
+        System.out.println("No tiene permiso de eliminar usuarios"); 
+    }
+    @Override
+    public void cambiarEstado(){
+        System.out.println("No tiene permiso de modificar el estado de otros usuarios"); 
     }
 }
